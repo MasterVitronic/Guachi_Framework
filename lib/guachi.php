@@ -219,8 +219,8 @@
 			$timestamp = time();
 		}
 
-		$days_of_week = config_array(DAYS_OF_WEEK);
-		$months_of_year = config_array(MONTHS_OF_YEAR);
+		$days_of_week = config_array(days_of_week);
+		$months_of_year = config_array(months_of_year);
 
 		$format = strtr($format, "lDFM", "#$%&");
 		$result = date($format, $timestamp);
@@ -236,6 +236,32 @@
 
 		$month = substr($months_of_year[(int)date("n", $timestamp) - 1], 0, 3);
 		$result = str_replace("&", $month, $result);
+
+		return $result;
+	}
+
+	/* Convert configuration line to array
+	 *
+	 * INPUT:  string config line[, bool look for key-value
+	 * OUTPUT: array config line
+	 * ERROR:  -
+	 */
+	function config_array($line, $key_value = true) {
+		$items = explode("|", $line);
+
+		if ($key_value == false) {
+			return $items;
+		}
+
+		$result = array();
+		foreach ($items as $item) {
+			@list($key, $value) =  explode(":", $item, 2);
+			if ($value === null) {
+				array_push($result, $key);
+			} else {
+				$result[$key] = $value;
+			}
+		}
 
 		return $result;
 	}
