@@ -1,0 +1,8 @@
+/*.db
+/*-shm
+/*-wal
+/guachi.ini
+/modules.ini
+/cache/*
+/extras/pruebas/
+/public/pruebas.php

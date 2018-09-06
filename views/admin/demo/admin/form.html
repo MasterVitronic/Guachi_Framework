@@ -1,0 +1,17 @@
+<div style="text-align:center">
+            <h1>Formulario de Usuario</h1>
+            {{#messages}}
+                <p>{{message}}</p>
+            {{/messages}}
+            <br/>
+            <br/>
+            <form action="" method="post">
+                <input type="text" name="fullname" value="{{{fullname}}}" placeholder="Nombre completo" style="width: 30%;margin-top: 20px;"/><br>
+                <input type="text" name="username" value="{{{username}}}" placeholder="Usuario" style="width: 30%;margin-top: 20px;"/><br>
+                <input type="password" name="password" value="" placeholder="Contaseña"  style="width: 30%;margin-top: 20px;"/><br>
+                <input type="password" name="password2" value="" placeholder="Repita Contaseña"  style="width: 30%;margin-top: 20px;"/><br>
+                <input type="hidden" name="id_user" value="{{{id_user}}}"/><br>
+                <input type="submit" name="submit_button" value="Guardar" style="width: 20%;margin-top: 20px;"/>
+                <a href="/admin" style="width: 30%;margin-top: 20px;">Cancelar</a>
+            </form>
+        </div>

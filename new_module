@@ -1,0 +1,118 @@
+#!/usr/bin/php5
+<?php
+        chdir(__DIR__);
+        require ("lib/guachi.php");
+        require ('lib/security.php');
+
+        /* Muestro la ayuda y salgo*/
+        function help_exit() {
+            printf("Usage: %s public|private <module name> \n", $GLOBALS["argv"][0]);
+            exit;
+        }
+
+        /* Copia un archivo, pero no lo sobreescribe*/
+        function safe_copy($source, $dest) {
+            if (file_exists($source) == false) {
+                return false;
+            }else{
+                if (file_exists($dest)) {
+                    printf("Warning, Archivo ya existe: %s\n", $dest);
+                    return false;
+                }
+                copy($source, $dest);
+                return true;
+            }
+        }
+
+        /* Setea los nombres dentro de las plantillas */
+        function set_nombres($directory, $module) {
+            $filename = $directory . "/" . $module . ".php";
+            if (($file = file($filename)) === false) {
+                return false;
+            }
+            $file[1] = str_replace("/", '_', str_replace("XXX", $module, $file) );
+            if (($fp = fopen($filename, "w")) == false) {
+                return false;
+            }
+            fputs($fp, implode("", $file[1]));
+            fclose($fp);
+            return true;
+        }
+
+        /* Comienza la diversion*/
+        error_reporting(E_ALL & ~E_NOTICE); /*activo todos los errores de php*/
+
+        /*cuento la cantdad de argumentos*/
+        if (count($argv) < 3) {
+            help_exit();
+        } else if (in_array($argv[1], array("public", "private")) == false) {
+            help_exit();
+        }
+
+        /*guardo el primer argumento en la variable modulos*/
+        $module = $argv[2];
+        /* Valida el nombre del modulo*/
+        $module_characters = VALIDATE_NONCAPITALS . VALIDATE_NUMBERS . "/_";
+        if (valid_input($module, $module_characters) == false) {
+            exit("Nombre de modulo invalido.\n");
+        }
+
+        /* Verifica si el modulo ya existe*/
+        if ( module_exists($module, true) ) {
+            exit;
+        }
+        
+        /* Creo los directorios*/
+        list($logic_dir) = explode("/", $module);
+        $locations = [
+            "controllers/$logic_dir",
+            "models/$logic_dir"
+        ];
+        $ofs = 0;
+        while (($pos = strpos($module, "/", $ofs)) !== false) {
+            $ofs = $pos + 1;
+            $subdir = "/".substr($module, 0, $pos);
+            foreach ($locations as $location) {
+                if (file_exists($location) == false) {
+                    printf("Creando directorio %s .\n", $location);
+                    //mkdir($location.$subdir, 0755, true);
+                    mkdir($location, 0755, true);
+                }
+            }
+        }
+        /*creo los directorios de las vistas*/
+        $dir_theme = ($argv[1] == 'private') ? 'admin/'.admin_theme  : 'public/'.public_theme ;
+        $locations_views = [
+            "views/$dir_theme/$module",
+            "public/js/$dir_theme/$module",
+            "public/css/themes/$dir_theme/$module"
+        ];
+        foreach ($locations_views as $location) {
+            if (file_exists($location) == false) {
+                printf("Creando directorio %s .\n", $location);
+                mkdir($location, 0755, true);
+            }
+        }
+
+        /* Copia de la plantillas*/
+        print "Creando el controlador, el modelo, la vista y los archivos asociados.\n";
+        safe_copy("extras/plantillas/controller.php", "controllers/$module.php");
+        safe_copy("extras/plantillas/model.php", "models/$module.php");
+        touch("views/$dir_theme/$module/main.html");
+        touch("public/js/$dir_theme/$module/main.js");
+        touch("public/css/themes/$dir_theme/$module/main.css");
+
+        /* Seteando el nombre del modulo*/
+        print "Configurando...\n";
+        set_nombres('controllers', $module);
+        set_nombres('models', $module);
+
+        /* cargo el archivo de configuracion*/
+        $config = parse_ini_file('modules.ini', true);
+        $mode = ($argv[1] == 'private') ? 'admin' : 'page';
+        /*añado la informacion nueva*/
+        $config[$argv[1]][$mode][] = $module;
+        /*finalmente escribo el archivo*/
+        write_ini_file('modules.ini', $config);
+
+        print "Listo!.\n";
