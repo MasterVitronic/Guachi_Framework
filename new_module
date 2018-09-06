@@ -30,7 +30,8 @@
             if (($file = file($filename)) === false) {
                 return false;
             }
-            $file[1] = str_replace("/", '_', str_replace("XXX", $module, $file) );
+            $module = str_replace("/", "_", $module);
+            $file[1] = str_replace("XXX", $module, $file);
             if (($fp = fopen($filename, "w")) == false) {
                 return false;
             }
