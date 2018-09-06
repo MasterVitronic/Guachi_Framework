@@ -63,23 +63,19 @@
         }
         
         /* Creo los directorios*/
-        list($logic_dir) = explode("/", $module);
-        $locations = [
-            "controllers/$logic_dir",
-            "models/$logic_dir"
-        ];
+        $locations = array("controllers", "models");
         $ofs = 0;
         while (($pos = strpos($module, "/", $ofs)) !== false) {
             $ofs = $pos + 1;
             $subdir = "/".substr($module, 0, $pos);
             foreach ($locations as $location) {
-                if (file_exists($location) == false) {
-                    printf("Creando directorio %s .\n", $location);
-                    //mkdir($location.$subdir, 0755, true);
-                    mkdir($location, 0755, true);
+                if (file_exists($location.$subdir) == false) {
+                    printf("Creando directorios %s%s.\n", $location, $subdir);
+                    mkdir($location.$subdir, 0755, true);
                 }
             }
         }
+
         /*creo los directorios de las vistas*/
         $dir_theme = ($argv[1] == 'private') ? 'admin/'.admin_theme  : 'public/'.public_theme ;
         $locations_views = [
@@ -97,7 +93,9 @@
         /* Copia de la plantillas*/
         print "Creando el controlador, el modelo, la vista y los archivos asociados.\n";
         safe_copy("extras/plantillas/controller.php", "controllers/$module.php");
+        print "Creando controllers/$module.php.\n";
         safe_copy("extras/plantillas/model.php", "models/$module.php");
+        print "Creando models/$module.php.\n";
         touch("views/$dir_theme/$module/main.html");
         touch("public/js/$dir_theme/$module/main.js");
         touch("public/css/themes/$dir_theme/$module/main.css");
