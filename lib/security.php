@@ -173,7 +173,7 @@
 
 		$result = "";
 		for ($i = 0; $i < $length; $i++) {
-			$result .= $characters[random_int(0, $max_chars)];
+			$result .= $characters[mt_rand(0, $max_chars)];
 		}
 
 		return $result;
