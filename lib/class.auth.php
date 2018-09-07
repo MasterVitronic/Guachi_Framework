@@ -16,7 +16,8 @@ class auth {
     private $username;
     private $id_user;
     const   KEY_CSRF = "csrf";
-    
+    private $session_persistent;
+
     /**
      * Instancia para el patrón de diseño singleton (instancia única)
      * @var object instancia
@@ -107,11 +108,11 @@ class auth {
                 $ip_address = get_ip();
                 if($ip_address){
                     $_SESSION = [
-                        'username'          => $this->username,
-                        'id_user'           => $this->id_user,
-                        'session_timeout'   => (time() + session_timeout),
-                        'ip_address'        => $ip_address
-                    ];
+                        'username'        => $this->username,
+                        'id_user'         => $this->id_user,
+                        'session_timeout' => is_true($this->session_persistent) ? false : (time() + session_timeout),
+                        'ip_address'      => $ip_address
+                    ];                
                     return true;
                 }
                 return false;
@@ -125,13 +126,15 @@ class auth {
      * @access public
      */
     public function logIn($username, $password) {
-        $query    = 'select id_user,status,password from users where username=%s and status=%s';
+        $query    = 'select id_user,status,password,session_persistent '
+                    .'from users where username=%s and status=%s';
         $resource = $this->db->query($query,$username,'t');
         $results  = $this->db->get_row($resource);
         if(isset($results->id_user)){
             if(password_verify($password , $results->password)){
-                $this->username  = $username;
-                $this->id_user   = $results->id_user;
+                $this->username            = $username;
+                $this->id_user             = $results->id_user;
+                $this->session_persistent  = $results->session_persistent;
                 $this->key('login');
                 return true;
             }
@@ -176,7 +179,10 @@ class auth {
      * @access public
      */
     public function sessionIsValid() {
-        if( isset($_SESSION['id_user']) and isset($_SESSION['session_timeout']) ){
+        if( isset($_SESSION['id_user']) ){
+            if( $_SESSION['session_timeout'] === false ){
+                return true;
+            }
             if( $_SESSION['session_timeout'] > time() ){
                 $_SESSION['session_timeout'] = (time() + session_timeout);
                 return true;
