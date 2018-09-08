@@ -12,14 +12,64 @@ Copyright (c) 2018  Díaz  Víctor  aka  (Máster Vitronic)
 
 class router {
 
+    /**
+     * El nombre del modulo
+     *
+     * @var string
+     * @access private
+     */
     private $module         = null;
+
+    /**
+     * La url 
+     *
+     * @var string
+     * @access private
+     */
     private $url            = null;
+
+    /**
+     * La pagina solicitada
+     *
+     * @var string
+     * @access private
+     */
     private $page           = null;
+
     private $request        = array();
+
+    /**
+     * Los parametros pasados a la url
+     *
+     * @var array
+     * @access private
+     */
     private $parameters     = array();
+
+    /**
+     * Indica si el request es ajax
+     *
+     * @var bool
+     * @access private
+     */
     private $ajax_request   = false;
+
+    /**
+     * El recuerso de la clase auth
+     *
+     * @var resource
+     * @access private
+     */
     private $auth           = null;
+
+    /**
+     * Code HTTP
+     *
+     * @var int
+     * @access private
+     */
     private $http_status    = 200;
+
     /**
      * Instancia para el patrón de diseño singleton (instancia única)
      * @var object instancia
@@ -108,13 +158,18 @@ class router {
         return null;
     }
 
-
-
-    /* Module available on disk
+    /**
+     * module_on_disk
+     * Module available on disk
+     * 
+     * @param string $url    la url
+     * @param string $pages  public|private
      *
-     * INPUT:  string URL, string page configuration file
-     * OUTPUT: string module identifier
-     * ERROR:  null
+     * @author Hugo Leisink <hugo@leisink.net>
+     * @return string module identifier
+     * @access private
+     *
+     * @see https://banshee-php.org/
      */
     private function module_on_disk($url, $pages) {
         $module = null;
@@ -143,13 +198,17 @@ class router {
         return $module;
     }
 
-
-
-    /* Determine qué módulo necesita ser cargado basándose en la página solicitada.
+    /**
+     * select_module
+     * Determina qué módulo necesita ser cargado basándose en la página solicitada.
+     * 
+     * @param string $page  La pagina solicitada
      *
-     * INPUT:  string page identifier
-     * OUTPUT: -
-     * ERROR:  -
+     * @author Hugo Leisink <hugo@leisink.net>
+     * @author Máster Vitronic
+     * @access public
+     *
+     * @see https://banshee-php.org/
      */
     public function select_module($page) {
         if (($this->module !== null) && ($this->module !== LOGIN_MODULE)) {
