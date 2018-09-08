@@ -26,22 +26,37 @@ class auth {
      * @var string
      * @access private
      */
-
     private $username;
+
     /**
      * El id del usuario den la base de datos
      *
      * @var int
      * @access private
      */
-
     private $id_user;
+
     /**
      * El campo en la sesion para el CSRF
      *
      * @var string
      */
     const   KEY_CSRF = "csrf";
+
+    /**
+     * El nombre de la session
+     *
+     * @var string
+     */
+	const SESSION_NAME = "guachi_session_id";
+
+    /**
+     * El id de la sesion
+     *
+     * @var string
+     * @access private
+     */
+    private $session_id = null;
 
     /**
      * Sesion persistento o no
@@ -68,6 +83,7 @@ class auth {
      */
     private function __construct() {
         if (!isset($_SESSION)) {
+            session_name(self::SESSION_NAME);
             session_start();
         }
         global $db;
@@ -144,19 +160,21 @@ class auth {
     private function key($mode) {
         switch ($mode) {
             case 'exit':
-                return (session_destroy()) ? true : false;
+                unset($_COOKIE[self::SESSION_NAME]);
+                session_regenerate_id(true);
+                session_unset();
+                return session_destroy();
             case 'login':
-                $ip_address = get_ip();
-                if($ip_address){
-                    $_SESSION = [
-                        'username'        => $this->username,
-                        'id_user'         => $this->id_user,
-                        'session_timeout' => is_true($this->session_persistent) ? false : (time() + session_timeout),
-                        'ip_address'      => $ip_address
-                    ];                
-                    return true;
-                }
-                return false;
+                $_SESSION = [
+                    'username'        => $this->username,
+                    'id_user'         => $this->id_user,
+                    'session_timeout' => is_true($this->session_persistent) ? false : (time() + session_timeout),
+                    'ip_address'      => get_ip()
+                ];
+                $this->session_id     = session_id();
+                setcookie(self::SESSION_NAME,$this->session_id,null,"/", "", is_true(enforce_https), true);
+                $_COOKIE[self::SESSION_NAME] = $this->session_id;
+                return true;
         }
         return false;
     }
@@ -182,8 +200,7 @@ class auth {
                 $this->username            = $username;
                 $this->id_user             = $results->id_user;
                 $this->session_persistent  = $results->session_persistent;
-                $this->key('login');
-                return true;
+                return $this->key('login');
             }
         }
         return false;
