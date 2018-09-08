@@ -12,10 +12,43 @@ Copyright (c) 2018  Díaz  Víctor  aka  (Máster Vitronic)
 
 class auth {
 
+    /**
+     * Recurso de la db.
+     *
+     * @var resource
+     * @access private
+     */
     private $db;
+
+    /**
+     * El nombre de usuarios
+     *
+     * @var string
+     * @access private
+     */
+
     private $username;
+    /**
+     * El id del usuario den la base de datos
+     *
+     * @var int
+     * @access private
+     */
+
     private $id_user;
+    /**
+     * El campo en la sesion para el CSRF
+     *
+     * @var string
+     */
     const   KEY_CSRF = "csrf";
+
+    /**
+     * Sesion persistento o no
+     *
+     * @var bool
+     * @access private
+     */
     private $session_persistent;
 
     /**
@@ -96,8 +129,16 @@ class auth {
     }
 
     /**
-     * metodo key
+     * key
+     * Inicia/Cierra la sesion
+     *  parametros supportados:
+     * * `exit` Destruye toda la sesion.
+     * * `login` Inicia la sesion.
+     * 
+     * @param string $mode
      *
+     * @author Máster Vitronic
+     * @return bool
      * @access private
      */
     private function key($mode) {
@@ -121,8 +162,14 @@ class auth {
     }
 
     /**
-     * metodo logIn
+     * logIn
+     * Valida/verifica los credenciales
      *
+     * @param string $username
+     * @param string $password
+     *
+     * @author Máster Vitronic
+     * @return bool
      * @access public
      */
     public function logIn($username, $password) {
@@ -156,8 +203,13 @@ class auth {
     }
 
     /**
-     * metodo hashPass
+     * hashPass
+     * Crea un password
+     * 
+     * @param string $password
      *
+     * @author Máster Vitronic
+     * @return string
      * @access public
      */
     public function hashPass($password) {
@@ -165,8 +217,12 @@ class auth {
     }
 
     /**
-     * metodo logOut
+     * logOut
+     * Cierra la sesion actual
+     * 
      *
+     * @author Máster Vitronic
+     * @return bool
      * @access public
      */
     public function logOut() {
@@ -174,11 +230,15 @@ class auth {
     }
 
     /**
-     * metodo sessionIsValid
+     * sessionIsValid
+     * Verifica que la sesion actual sea valida y esta vigente
+     * 
      *
-     * @access public
+     * @author Máster Vitronic
+     * @return bool
+     * @access private
      */
-    public function sessionIsValid() {
+    private function sessionIsValid() {
         if( isset($_SESSION['id_user']) ){
             if( $_SESSION['session_timeout'] === false ){
                 return true;
@@ -193,8 +253,12 @@ class auth {
     }
 
     /**
-     * metodo isLogged
+     * isLogged
+     * Retornara true en caso que este logeado o false en caso contrario
+     * 
      *
+     * @author Máster Vitronic
+     * @return bool
      * @access public
      */
     public function isLogged() {
@@ -202,17 +266,25 @@ class auth {
     }
 
     /**
-     * metodo setCsrf
+     * setCsrf
+     * Establece un nuevo valor ser usado como CSRF
+     * 
      *
+     * @author Máster Vitronic
+     * @return string
      * @access public
      */
     public function setCsrf() {
-        $_SESSION[self::KEY_CSRF] = hash("sha256", random_string(16));
+        $_SESSION[self::KEY_CSRF] = hash("sha256", random_string(64));
     }
 
     /**
-     * metodo getCsrf
+     * getCsrf
+     * Retorna el CSRF actual
+     * 
      *
+     * @author Máster Vitronic
+     * @return string
      * @access public
      */
     public function getCsrf() {
@@ -220,8 +292,13 @@ class auth {
     }
     
     /**
-     * metodo csrfIsValid
+     * csrfIsValid
+     * Valida/Verifica el CSRF
      *
+     * @param string $csrf
+     *
+     * @author Máster Vitronic
+     * @return bool
      * @access public
      */
     public function csrfIsValid($csrf) {
