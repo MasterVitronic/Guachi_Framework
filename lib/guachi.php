@@ -1,20 +1,20 @@
 <?php
 
 
-	define('GUACHI_VERSION','2.1');
-	define('DS', DIRECTORY_SEPARATOR);
-	define('ROOT', realpath(dirname( __DIR__ ) ) . DS );
-	define("YES", 1);
-	define("NO", 0);
-	define("HOUR", 3600);
-	define("DAY", 86400);
-	define("PASSWORD_MIN_LENGTH", 8);
-	define("PASSWORD_MAX_LENGTH", 1000);
-	define("DIR_CONTROLLERS",   ROOT . 'controllers' . DS );
-	define("DIR_MODELS",        ROOT . 'models'      . DS );
-	define("DIR_VIEWS",         ROOT . 'views'       . DS );
-	define("ERROR_MODULE",'notFound');
-	define("LOGIN_MODULE",'login');
+    define('GUACHI_VERSION','2.1');
+    define('DS', DIRECTORY_SEPARATOR);
+    define('ROOT', realpath(dirname( __DIR__ ) ) . DS );
+    define("YES", 1);
+    define("NO", 0);
+    define("HOUR", 3600);
+    define("DAY", 86400);
+    define("PASSWORD_MIN_LENGTH", 8);
+    define("PASSWORD_MAX_LENGTH", 1000);
+    define("DIR_CONTROLLERS",   ROOT . 'controllers' . DS );
+    define("DIR_MODELS",        ROOT . 'models'      . DS );
+    define("DIR_VIEWS",         ROOT . 'views'       . DS );
+    define("ERROR_MODULE",'notFound');
+    define("LOGIN_MODULE",'login');
 
     /**
      * guachi_autoload
@@ -38,23 +38,23 @@
         }
     };
 
-	/* Convert a page path to a module path
-	 *
-	 * INPUT:  array / string page path
-	 * OUTPUT: array / string module path
-	 * ERROR:  -
-	 */
-	function page_to_module($page) {
-		if (is_array($page) == false) {
-			if (($pos = strrpos($page, ".")) !== false) {
-				$page = substr($page, 0, $pos);
-			}
-		} else foreach ($page as $i => $item) {
-			$page[$i] = page_to_module($item);
-		}
-
-		return $page;
-	}
+    /* Convert a page path to a module path
+     *
+     * INPUT:  array / string page path
+     * OUTPUT: array / string module path
+     * ERROR:  -
+     */
+    function page_to_module($page) {
+        if (is_array($page) == false) {
+            if (($pos = strrpos($page, ".")) !== false) {
+                $page = substr($page, 0, $pos);
+            }
+        } else foreach ($page as $i => $item) {
+            $page[$i] = page_to_module($item);
+        }
+    
+        return $page;
+    }
 
     /**
      * metodo getModules
@@ -63,32 +63,32 @@
      */
     function getModules($section,$module) {
         static $cache = array();
-		if (isset($cache[$section][$module])) {
-			return $cache[$section][$module];
-		}
+        if (isset($cache[$section][$module])) {
+            return $cache[$section][$module];
+        }
         $modules = parse_ini_file(ROOT . 'modules.ini', true);
         $cache = $modules;
         return $modules[$section][$module];
     }
 
-	/* Check for module existence
-	 *
-	 * INPUT:  string module
-	 * OUTPUT: bool module exists
-	 * ERROR:  -
-	 */
-	function module_exists($module, $warn = false) {
-		foreach (array("public", "private") as $type) {
+    /* Check for module existence
+     *
+     * INPUT:  string module
+     * OUTPUT: bool module exists
+     * ERROR:  -
+     */
+    function module_exists($module, $warn = false) {
+        foreach (array("public", "private") as $type) {
             $section = ($type == 'private') ? 'admin' : 'page';
-			if (in_array($module, getModules($type , $section)) ) {
-				if ($warn) {
-					printf("Ya existe un módulo %s '%s'.\n", $type, $module);
-				}
-				return true;
-			}
-		}
-		return false;
-	}
+            if (in_array($module, getModules($type , $section)) ) {
+                if ($warn) {
+                    printf("Ya existe un módulo %s '%s'.\n", $type, $module);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * metodo setConfig
@@ -163,117 +163,117 @@
      * @param  mixed      
      * @return boolean
      */
-	function is_true($bool) {
-		if (is_string($bool)) {
-			$bool = strtolower($bool);
-		}
-		return in_array($bool, array(true, YES, "1", "yes", "true", "on"), true);
-	}
+    function is_true($bool) {
+        if (is_string($bool)) {
+            $bool = strtolower($bool);
+        }
+        return in_array($bool, array(true, YES, "1", "yes", "true", "on"), true);
+    }
 
-	/* Convert mixed to boolean
-	 *
-	 * INPUT:  mixed
-	 * OUTPUT: boolean
-	 * ERROR:  -
-	 */
-	function is_false($bool) {
-		return (is_true($bool) === false);
-	}
-
-	/* Convert boolean to string
-	 *
-	 * INPUT:  boolean
-	 * OUTPUT: string "yes"|"no"
-	 * ERROR:  -
-	 */
-	function show_boolean($bool) {
-		return (is_true($bool) ? "yes" : "no");
-	}
-
-	/* Convert empty string to null
-	 *
-	 * INPUT:  string
-	 * OUTPUT: string|null
-	 * ERROR:  -
-	 */
-	function null_if_empty($str) {
-		if (is_string($str) == false) {
-			return $str;
-		}
-
-		if (trim($str) == "") {
-			$str = null;
-		}
-
-		return $str;
-	}
-
-	/* Localized date string
-	 *
-	 * INPUT:  string format[, integer timestamp]
-	 * OUTPUT: string date
-	 * ERROR:  -
-	 */
-	function date_string($format, $timestamp = null) {
-		if ($timestamp === null) {
-			$timestamp = time();
-		}
-
-		$days_of_week = config_array(days_of_week);
-		$months_of_year = config_array(months_of_year);
-
-		$format = strtr($format, "lDFM", "#$%&");
-		$result = date($format, $timestamp);
-
-		$day = $days_of_week[(int)date("N", $timestamp) - 1];
-		$result = str_replace("#", $day, $result);
-
-		$day = substr($days_of_week[(int)date("N", $timestamp) - 1], 0, 3);
-		$result = str_replace("$", $day, $result);
-
-		$month = $months_of_year[(int)date("n", $timestamp) - 1];
-		$result = str_replace("%", $month, $result);
-
-		$month = substr($months_of_year[(int)date("n", $timestamp) - 1], 0, 3);
-		$result = str_replace("&", $month, $result);
-
-		return $result;
-	}
-
-	/* Convert configuration line to array
-	 *
-	 * INPUT:  string config line[, bool look for key-value
-	 * OUTPUT: array config line
-	 * ERROR:  -
-	 */
-	function config_array($line, $key_value = true) {
-		$items = explode("|", $line);
-
-		if ($key_value == false) {
-			return $items;
-		}
-
-		$result = array();
-		foreach ($items as $item) {
-			@list($key, $value) =  explode(":", $item, 2);
-			if ($value === null) {
-				array_push($result, $key);
-			} else {
-				$result[$key] = $value;
-			}
-		}
-
-		return $result;
-	}
-
-    /**
-     * https://stackoverflow.com/questions/5695145/how-to-read-and-write-to-an-ini-file-with-php
-     * Write an ini configuration file
-     * 
-     * @param string $file
-     * @param array  $array
-     * @return bool
+    /* Convert mixed to boolean
+     *
+     * INPUT:  mixed
+     * OUTPUT: boolean
+     * ERROR:  -
      */
+    function is_false($bool) {
+        return (is_true($bool) === false);
+    }
+
+    /* Convert boolean to string
+     *
+     * INPUT:  boolean
+     * OUTPUT: string "yes"|"no"
+     * ERROR:  -
+     */
+    function show_boolean($bool) {
+        return (is_true($bool) ? "yes" : "no");
+    }
+
+    /* Convert empty string to null
+     *
+     * INPUT:  string
+     * OUTPUT: string|null
+     * ERROR:  -
+     */
+    function null_if_empty($str) {
+        if (is_string($str) == false) {
+            return $str;
+        }
+    
+        if (trim($str) == "") {
+            $str = null;
+        }
+    
+        return $str;
+    }
+
+    /* Localized date string
+     *
+     * INPUT:  string format[, integer timestamp]
+     * OUTPUT: string date
+     * ERROR:  -
+     */
+    function date_string($format, $timestamp = null) {
+        if ($timestamp === null) {
+            $timestamp = time();
+        }
+    
+        $days_of_week = config_array(days_of_week);
+        $months_of_year = config_array(months_of_year);
+    
+        $format = strtr($format, "lDFM", "#$%&");
+        $result = date($format, $timestamp);
+    
+        $day = $days_of_week[(int)date("N", $timestamp) - 1];
+        $result = str_replace("#", $day, $result);
+    
+        $day = substr($days_of_week[(int)date("N", $timestamp) - 1], 0, 3);
+        $result = str_replace("$", $day, $result);
+    
+        $month = $months_of_year[(int)date("n", $timestamp) - 1];
+        $result = str_replace("%", $month, $result);
+    
+        $month = substr($months_of_year[(int)date("n", $timestamp) - 1], 0, 3);
+        $result = str_replace("&", $month, $result);
+    
+        return $result;
+    }
+
+    /* Convert configuration line to array
+     *
+     * INPUT:  string config line[, bool look for key-value
+     * OUTPUT: array config line
+     * ERROR:  -
+     */
+    function config_array($line, $key_value = true) {
+        $items = explode("|", $line);
+    
+        if ($key_value == false) {
+            return $items;
+        }
+    
+        $result = array();
+        foreach ($items as $item) {
+            @list($key, $value) =  explode(":", $item, 2);
+            if ($value === null) {
+                array_push($result, $key);
+            } else {
+                $result[$key] = $value;
+            }
+        }
+    
+        return $result;
+    }
+    
+    /**
+    * https://stackoverflow.com/questions/5695145/how-to-read-and-write-to-an-ini-file-with-php
+    * Write an ini configuration file
+    * 
+    * @param string $file
+    * @param array  $array
+    * @return bool
+    */
     function write_ini_file($file, $array = []) {
         // check first argument is string
         if (!is_string($file)) {
@@ -385,10 +385,10 @@
     /*autocargo las dependencias*/
     spl_autoload_register("guachi_autoload", true, true);
 
-	ini_set("zlib.output_compression", "Off");
-	if (ini_get("allow_url_include") != 0) {
-		exit("Set 'allow_url_include' to 0.");
-	}
+    ini_set("zlib.output_compression", "Off");
+    if (ini_get("allow_url_include") != 0) {
+        exit("Set 'allow_url_include' to 0.");
+    }
 
     /*configuro la conexion a la base de datos*/
     if( is_true(use_db) ){
@@ -411,6 +411,5 @@
             case 'pgsql_pdo':
                 $db  = new \lib\db\PGSQL_PDO_connection(db_hostname, db_database, db_username, db_password);
                 break;
-                
         }
     }
