@@ -78,7 +78,7 @@
         }
 
         /*creo los directorios de las vistas*/
-        $dir_theme = ($argv[1] == 'private') ? 'admin/'.admin_theme  : 'public/'.public_theme ;
+        $dir_theme = $argv[1].DS.public_theme ;
         $locations_views = [
             "views/$dir_theme/$module",
             "public/js/$dir_theme/$module",
