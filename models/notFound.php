@@ -12,18 +12,16 @@ class notFound_model extends model {
         $this->view->description    = 'La descripcion';
         /*el autor del modulo*/
         $this->view->author         = 'Máster Vitronic';
-        /*que tema usar admin o public */
-        $this->view->useTheme('admin');
         /*seteo todos los parametros de la vista*/
         $this->view->set();
         /*La plantilla de la pagina*/
-        $page   = $this->view->tpl->loadTemplate($this->view->getTheme('page'));
+        $page   = $this->view->tpl->loadTemplate('/public/demo/page');
         /*En este caso el main va aqui*/
-        $main   = $this->view->tpl->loadTemplate($this->view->getTheme('404'));
+        $main   = $this->view->tpl->loadTemplate('/public/demo/404');
         /*Cargo las plantillas en la vista*/
         $this->view->load($page->render([
                 'metatags'  => $this->view->meta,
-                'main'      => $main->render($this->view->getContent()),
+                'main'      => $main->render(),
                 'js'        => $this->view->js
             ]
         ));
