@@ -19,14 +19,12 @@ class inicio_model extends model {
         $this->view->description    = 'La descripcion del modulo Inicio';
         /*el autor del modulo*/
         $this->view->author         = 'Máster Vitronic';
-        /*que esquema de tema usar 'admin' o 'public' */
-        $this->view->useTheme('public');
         /*seteo todos los parametros de la vista*/
         $this->view->set();
         /*La plantilla de la pagina*/
-        $page   = $this->view->tpl->loadTemplate($this->view->getTheme('page'));
+        $page   = $this->view->loadTemplate('page');
         /*En este caso el main va aqui*/
-        $main   = $this->view->tpl->loadTemplate($this->view->getTheme('inicio/main'));
+        $main   = $this->view->loadTemplate('inicio/main');
         /*Cargo las plantillas en la vista*/
         $this->view->load($page->render([
                 'metatags'  => $this->view->meta,

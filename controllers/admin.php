@@ -39,8 +39,6 @@ class admin_controller extends controller {
         $this->view->description    = $this->description;
         /*el autor del modulo*/
         $this->view->author         = $this->author;
-        /*que esquema de tema usar 'admin' o 'public' */
-        $this->view->useTheme('admin');
         /*seteo todos los parametros de la vista*/
         $this->view->set();
     }
@@ -48,7 +46,7 @@ class admin_controller extends controller {
     /*la funcion que escupe la pagina*/
     private function show() {
         /*La plantilla principal de la pagina*/
-        $page   = $this->view->tpl->loadTemplate($this->view->getTheme('page'));
+        $page   = $this->view->loadTemplate('page');
         /*Cargo las plantillas en la vista*/
         $this->view->load($page->render([
                 /*esto carga los metadata*/
@@ -78,7 +76,7 @@ class admin_controller extends controller {
         /*le meto el contenido de users a la plantilla main, para rellenar la tabla*/
         $this->view->addContent( [ 'users' => $users] );
         /*la plantilla main de la lista*/
-        $this->main_tpl=$this->view->tpl->loadTemplate($this->view->getTheme('admin/main'));
+        $this->main_tpl=$this->view->loadTemplate('admin/main');
         /*Muestro !*/
         $this->show();
     }
@@ -94,7 +92,7 @@ class admin_controller extends controller {
         /*le meto el contenido de user a la plantilla main, para rellenar el formulario*/
         $this->view->addContent($user);
         /*la plantilla main del formulario*/
-        $this->main_tpl=$this->view->tpl->loadTemplate($this->view->getTheme('admin/form'));
+        $this->main_tpl=$this->view->loadTemplate('admin/form');
         /*Muestro !*/
         $this->show();        
     }
