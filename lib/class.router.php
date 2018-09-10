@@ -21,6 +21,14 @@ class router {
     private $module         = null;
 
     /**
+     * El tipo de modulo public|private
+     *
+     * @var string
+     * @access private
+     */
+    private $type_module    = null;
+
+    /**
      * La url 
      *
      * @var string
@@ -149,6 +157,7 @@ class router {
     public function __get($key) {
         switch ($key) {
             case "module"       : return $this->module;
+            case "type_module"  : return $this->type_module;
             case "page"         : return $this->page;
             case "url"          : return $this->url;
             case "request"      : return $this->request;
@@ -238,6 +247,7 @@ class router {
         if ($public_count >= $private_count) {
             /* La pagina es publica
              */
+            $this->type_module = 'public';
             $this->module = $public_module;
             $this->parameters = array_slice($this->pathinfo, $public_count);
             return;
@@ -245,6 +255,7 @@ class router {
     
         /* La pagina es privada
          */
+        $this->type_module = 'private';
         $this->module = $private_module;
         $this->parameters = array_slice($this->pathinfo, $private_count);
     
