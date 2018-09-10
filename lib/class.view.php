@@ -15,17 +15,18 @@ class view {
 
     private $css            = '' ;
     private $js             = '' ;
-    public  $author         = '' ;
-    public  $title          = '' ;
-    public  $description    = '' ;
+    private $author         = '' ;
+    private $title          = '' ;
+    private $description    = '' ;
     private $html           = '' ;
     private $meta                ;
     public  $tpl                 ;
     private $router              ;
     private $messages       = [] ;
     private $values         = [] ;
-    public $cache                ;
-    
+    public  $cache               ;
+    private $http_status    = 200;
+
     /**
      * Instancia para el patrón de diseño singleton (instancia única)
      * @var object instancia
@@ -83,12 +84,33 @@ class view {
      */
     public function __get($key) {
         switch ($key) {
-            case "meta"     : return $this->meta;
-            case "js"       : return $this->js;
-            case "messages" : return $this->messages;
-            case "values"   : return $this->values;
+            case 'meta'     : return $this->meta;
+            case 'js'       : return $this->js;
+            case 'css'      : return $this->css;
+            case 'messages' : return $this->messages;
+            case 'values'   : return $this->values;
+            case 'title'    : return $this->title;
+            case 'http_status': return $this->http_status;
+            case 'description': return $this->description;
         }
         return null;
+    }
+
+    /* Magic method set
+     *
+     * @access public
+     */
+    public function __set($key,$value) {
+        switch ($key) {
+            case 'meta'     :  $this->meta      = $value; break;
+            case 'messages' :  $this->messages  = $value; break;
+            case 'values'   :  $this->values    = $value; break;
+            case 'author'   :  $this->author    = $value; break;
+            case 'title'    :  $this->title     = $value; break;
+            case 'description':$this->description = $value; break;
+            case 'http_status':$this->http_status = $value; break;
+            default: trigger_error('Unknown variable: '.$key);
+        }
     }
 
     /* Add message to message buffer
@@ -130,40 +152,15 @@ class view {
     }
 
     /**
-     * useTheme
+     * loadTemplate
      *
-     * setea el tema
-     *
-     * @access public
-     */
-    public function useTheme($theme) {
-        if($theme === 'admin'){
-            $this->theme = $theme .DS. admin_theme  ;
-        }else if ($theme === 'public'){
-            $this->theme = $theme .DS. public_theme ;
-        }
-    }
-
-    /**
-     * getTheme
-     *
-     * retorna la ruta al theme
+     * wraper a mustache loadTemplate
      *
      * @access public
      */
-    public function getTheme($tpl) {
-        return   $this->theme . DS . $tpl;
-    }
-
-    /**
-     * setAuthor
-     *
-     * setea el autor
-     *
-     * @access public
-     */
-    public function setAuthor($author) {
-        $this->author = $author;
+    public function loadTemplate($tpl) {
+        $template = $this->router->type_module .DS. admin_theme . DS . $tpl;
+        return $this->tpl->loadTemplate($template);
     }
 
     /**
@@ -186,28 +183,6 @@ class view {
      */
     public function addJs($js) {
          $this->js .= "\t\t" .'<script src="'.$js.'"></script>' . PHP_EOL;
-    }
-
-    /**
-     * setTitle
-     *
-     * setea el titulo
-     *
-     * @access public
-     */
-    public function setTitle($title) {
-        $this->title = $title;
-    }
-
-    /**
-     * setDescription
-     *
-     * setea la descriccion
-     *
-     * @access public
-     */
-    public function setDescription($description) {
-        $this->description = $description;
     }
 
     /**
