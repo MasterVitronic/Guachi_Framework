@@ -159,7 +159,8 @@ class view {
      * @access public
      */
     public function loadTemplate($tpl) {
-        $template = $this->router->type_module .DS. admin_theme . DS . $tpl;
+        $theme = ($this->router->type_module === 'private') ? private_theme : public_theme ;
+        $template = $this->router->type_module .DS. $theme . DS . $tpl;
         return $this->tpl->loadTemplate($template);
     }
 
