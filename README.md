@@ -1,4 +1,4 @@
-Guachi Framework [![Logo](https://gitlab.com/vitronic/Guachi_Framework/raw/master/public/favicon.ico)]
+Guachi Framework ![Logo](https://gitlab.com/vitronic/Guachi_Framework/raw/master/public/favicon.ico)
 =====================
 
 **¿Que es Guachi?**
