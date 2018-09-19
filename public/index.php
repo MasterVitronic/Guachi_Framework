@@ -14,11 +14,9 @@ require_once realpath(dirname( __DIR__ ) ) . '/lib/guachi.php';
 require_once realpath(dirname( __DIR__ ) ) . '/lib/security.php';
 
 /*Iniciamos todas las instancias*/
-$router         = router::iniciar();
 $auth           = auth::iniciar();
+$router         = router::iniciar();
 $view           = view::iniciar();
-
-//print $router->url . PHP_EOL;
 
 /*Se incluye el modelo*/
 if (file_exists($file = DIR_MODELS.$router->module.".php")) {
