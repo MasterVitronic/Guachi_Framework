@@ -2,7 +2,7 @@
 	RewriteEngine On
 	RewriteBase /
 	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !/(css|files|fonts|images|js)(/|$)
+	RewriteCond %{REQUEST_FILENAME} !/(css|fonts|img|js)(/|$)
 	RewriteCond %{REQUEST_FILENAME} !/(favicon.ico|robots.txt)$
 	RewriteRule . /index.php [QSA,L]
 </IfModule>
