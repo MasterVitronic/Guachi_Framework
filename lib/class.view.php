@@ -236,8 +236,9 @@ class view {
         ."development framework of Vitronic) v".GUACHI_VERSION;
         header($header);
         if(is_true(use_cache)) {
-            $this->cache->init($this->router->url);
             if(is_true($this->cache->cache_on)){
+                $this->cache->init($this->router->url);
+                set_cache_header();
                 if ($this->cache->check()) {
                     print($this->cache->out());
                     return;
