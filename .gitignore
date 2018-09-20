@@ -4,5 +4,6 @@
 /guachi.ini
 /modules.ini
 /cache/*
+/node_modules/*
 /extras/pruebas/
 /public/pruebas.php
