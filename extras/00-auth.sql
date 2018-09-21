@@ -2,14 +2,14 @@ PRAGMA foreign_keys = on; --habilito las impresindibles claves foraneas
 PRAGMA journal_mode = WAL;--probar esto para tener algo de concurrencia
 
 drop table if exists users;
-create table if not exists users( --Tabla usuarios 
+create table if not exists users(
     id_user                 integer      primary key AUTOINCREMENT,
     fullname                varchar(64)  not null,                                       /*nombre completo*/
     username                varchar(32)  not null,                                       /*aka,alias,sobrenombre de este usuario*/
     image                   varchar(32)  default null,                                   /*url a la imagen o avatar del user*/
     password                varchar(512) not null,                                       /*contraseña de este usuario hash whirlpool*/
     session_persistent      varchar(1)   not null check (status in ('f','t')) default 't',/*define si la sesion es persistente*/
-    registreDate            datetime     default (datetime('now','localtime')),          /*la fecha de este registro*/
+    registre_date           datetime     default (datetime('now','localtime')),          /*la fecha de este registro*/
     status                  varchar(1)   not null check (status in ('f','t')) default 't'/*estatus de este usuario t = activo f = inactivo*/
 );
 create unique index if not exists users_id_user  on users (id_user);
