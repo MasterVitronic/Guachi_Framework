@@ -195,6 +195,14 @@ class view {
      * @return string
      */
     public function set() {
+        if(is_true(use_js_bundle)){
+            $this->js .= "\t\t" .'<script src="/js/guachi.js"></script>' . PHP_EOL;
+        }
+        if( is_false(production) ){
+            if( is_true(node_development_mode) and is_true(use_node_livereload) and valid_input(node_livereload_port, VALIDATE_NUMBERS) ){
+                $this->js .= "\t\t" .'<script src="//127.0.0.1:'.node_livereload_port.'/livereload.js"></script>' . PHP_EOL;
+            }
+        }
         $this->js   = trim($this->js);
         $this->meta =    '<title>'.$this->title.'</title>' . PHP_EOL
                 ."\t\t" .'<meta charset="utf-8">' . PHP_EOL
@@ -203,7 +211,8 @@ class view {
                 ."\t\t" .'<meta name="viewport"            content="width=device-width, initial-scale=1.0">' . PHP_EOL
                 ."\t\t" .'<meta name="generator"           content="Guachi (Lightweight and very simple php framework) v'.GUACHI_VERSION.'">' . PHP_EOL
                 ."\t\t" .'<meta name="description"         content="'.$this->description.'">' . PHP_EOL
-                ."\t\t" .'<meta name="author"              content="'.$this->author.'">';
+                ."\t\t" .'<meta name="author"              content="'.$this->author.'">' . PHP_EOL
+                ."\t\t" .'<meta name="module"              content="'.$this->router->module.'">';
     }
 
     /**
