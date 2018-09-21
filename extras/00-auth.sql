@@ -14,5 +14,8 @@ create table if not exists users(
 );
 create unique index if not exists users_id_user  on users (id_user);
 create unique index if not exists users_username on users (username);
-insert into users (fullname,username,password)values('Máster Vitronic','vitronic','$2y$10$sAfhvt49gueW3u59eoJ30OMju6JFlFIS7SAu/dbFzuuWXJpN.yr7m');
-
+insert into users (fullname,username,password)values('Máster Vitronic','vitronic','$2y$10$asjC6nRZEamPkecIRMDjTec1lpvGFGPfHgOOcUnUXFz5r5bLRXFHS');
+insert into users (fullname,username,password)values('Johana Urbaneja','johana','$2y$10$rXk5fn9AsOTrjzVnY6C6WOTLHA.vA4uBMkzM.ubsu3JGPoudWlYAu');
+insert into users (fullname,username,password)values('Victor Eduardo','vector','$2y$10$wRBDyOplZCDB9Ks7hKUCD.Gyz.hZfKc3XET1UpzVThQA6nUHM/qby');
+insert into users (fullname,username,password)values('Victor Diex','diex','$2y$10$EShqegKBU13zRbUCb/Gbk.pO03N5bo.g./WqbJzAn/GAaPNbFBGRu');
+insert into users (fullname,username,password)values('Victor Diego','diego','$2y$10$UWiV0bqGc75eq3ijrSC/r.mUqddQEywCXJNv6qYxJFtzybnMwYdjG');
