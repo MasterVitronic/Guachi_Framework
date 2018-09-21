@@ -59,7 +59,7 @@
         }
 
         /* Verifica si el modulo ya existe*/
-        if ( module_exists($module, true) ) {
+        if ( module_exists($module, $argv[1], true) ) {
             exit;
         }
         
@@ -78,10 +78,10 @@
         }
 
         /*creo los directorios de las vistas*/
-        $dir_theme = $argv[1].DS.public_theme ;
+        $dir_theme = ($argv[1] === 'public')?$argv[1].DS.public_theme:$argv[1].DS.private_theme;
         $locations_views = [
             "views/$dir_theme/$module",
-            "public/js/$dir_theme/$module",
+            "public/js/".$argv[1]."/$module",
             "public/css/themes/$dir_theme/$module"
         ];
         foreach ($locations_views as $location) {
@@ -98,8 +98,15 @@
         safe_copy("extras/plantillas/model.php", "models/$module.php");
         print "Creando models/$module.php.\n";
         touch("views/$dir_theme/$module/main.html");
-        touch("public/js/$dir_theme/$module/main.js");
-        touch("public/css/themes/$dir_theme/$module/main.css");
+        if(is_true(node_development_mode)){
+            touch("public/js/".$argv[1]."/$module/$module.src.js");
+            foreach (config_array(style_sheet_language) as $value) {
+                touch("public/css/themes/$dir_theme/$module/$module.".$value);
+            }
+        }else{
+            touch("public/js/".$argv[1]."/$module/$module.js");
+            touch("public/css/themes/$dir_theme/$module/$module.css");
+        }
 
         /* Seteando el nombre del modulo*/
         print "Configurando...\n";
