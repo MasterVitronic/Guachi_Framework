@@ -1,6 +1,6 @@
 'use strict';
 
-var functions   = require('../../common/functions.src');
+var functions   = require('../../common/functions');
 //var $           = require('jquery');
 var module      = functions.get_module();
 
