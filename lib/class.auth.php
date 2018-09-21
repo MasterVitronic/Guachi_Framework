@@ -213,9 +213,9 @@ class auth {
      */
     public function __get($key) {
         switch ($key) {
-            case "username"     : return isset($_SESSION['id_user']) ? intval($_SESSION['username']) : false;
-            case "id_user"      : return isset($_SESSION['id_user']) ? intval($_SESSION['id_user'])  : false;
-        }   
+            case "username" : return isset($_SESSION['id_user']) ? $_SESSION['username']        : false;
+            case "id_user"  : return isset($_SESSION['id_user']) ? intval($_SESSION['id_user']) : false;
+        }
         return null;
     }
 
