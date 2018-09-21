@@ -5,6 +5,7 @@
 /modules.ini
 /cache/*
 /public/js/guachi.js
+*.css
 /node_modules/*
 /.sass-cache/*
 /package-lock.json
