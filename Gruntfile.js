@@ -183,5 +183,5 @@ module.exports = function(grunt) {
     /*el builder  <grunt build> */
     grunt.registerTask('build', ['browserify','uglify','sass','less']);
     /*el watcher  <grunt monitor>*/
-    grunt.registerTask('monitor', ['watch']);
+    grunt.registerTask('monitor', ['browserify','uglify','sass','less','watch']);
 };
