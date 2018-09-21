@@ -61,14 +61,14 @@
      *
      * @access public
      */
-    function getModules($section,$module) {
+    function getModules($type,$section) {
         static $cache = array();
-        if (isset($cache[$section][$module])) {
-            return $cache[$section][$module];
+        if (isset($cache[$type][$section])) {
+            return $cache[$type][$section];
         }
         $modules = parse_ini_file(ROOT . 'modules.ini', true);
         $cache = $modules;
-        return $modules[$section][$module];
+        return isset($modules[$type][$section])?$modules[$type][$section] : [];
     }
 
     /* Check for module existence
@@ -77,15 +77,13 @@
      * OUTPUT: bool module exists
      * ERROR:  -
      */
-    function module_exists($module, $warn = false) {
-        foreach (array("public", "private") as $type) {
-            $section = ($type == 'private') ? 'admin' : 'page';
-            if (in_array($module, getModules($type , $section)) ) {
-                if ($warn) {
-                    printf("Ya existe un módulo %s '%s'.\n", $type, $module);
-                }
-                return true;
+    function module_exists($module, $type, $warn = false) {
+        $section = ($type == 'private') ? 'admin' : 'page';
+        if (in_array($module, getModules($type , $section)) ) {
+            if ($warn) {
+                printf("Ya existe un módulo %s '%s'.\n", $type, $module);
             }
+            return true;
         }
         return false;
     }
@@ -380,7 +378,7 @@
     /*cosas por default*/
     date_default_timezone_set(default_date_timezone);
     setlocale(LC_TIME, locale);    
-    (production)?error_reporting(0):error_reporting(-1);
+    is_true(production)?error_reporting(0):error_reporting(E_ALL);
 
     /*autocargo las dependencias*/
     spl_autoload_register("guachi_autoload", true, true);
