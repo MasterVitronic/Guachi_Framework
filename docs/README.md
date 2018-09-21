@@ -79,7 +79,7 @@ cp guachi.sample.ini guachi.ini
 cp modules.sample.ini modules.ini
 sqlite3 db.db <extras/00-auth.sql
 cp server-sample server
-
+gem install sass
 npm install
 ...
 
@@ -117,6 +117,7 @@ que ofrece `grunt` .
 **Bichos conocidos.**
 
 * ~~`new_module` falla al crear un submodulo de segundo nivel `./new_module private admin/sub/subsub` fallara, de momento si lo requiero esto lo hago a mano~~
+* Falla al hacer `npm start` esto no es un bicho, probablemente tenga que instalar sass `gem install sass`
 
 **TODO**
 * ~~Corregir y Mejorar el `new_module`~~
