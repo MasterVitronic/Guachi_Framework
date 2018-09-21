@@ -15,7 +15,7 @@ class admin_model extends model {
     /*retorna toda la lista de usuarios*/
     public function get_users() {
         /*armo la consulta*/
-        $query = "select * from users ";
+        $query = "select * from users order by id_user desc";
         /*ejecuto la consulta*/
         if (($users = $this->db->execute($query)) === false) {
             return false;

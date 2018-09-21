@@ -18,21 +18,17 @@ class admin_controller extends controller {
     /*la plantilla del main*/
     private $main_tpl       = '';
     /*el titulo del modulo*/
-    private $title          = 'El titulo del modulo admin';
+    private $title          = 'Modulo de administración de usuarios';
     /*la descripcion del modulo*/
-    private $description    = 'La descripcion del modulo admin';
+    private $description    = 'La descripción Modulo de administración de usuarios';
     /*el autor del modulo*/
     private $author         = 'Máster Vitronic';
 
     private function set(){       
-        /*En este caso de ejemplo no se usa CSS pero lo dejo aqui */
-        //$this->view->addCss('/css/themes/admin/moscow/common/moscow.css');
-        //$this->view->addCss('/css/themes/common/multi.min.css');   
-
-        /*En este caso de ejemplo no se usa JS pero lo dejo aqui*/
+        /*El css principal*/
+        $this->view->addCss('/css/themes/private/demo/mustard-ui.css');
+        /*En el caso de añadir algun js*/
         //$this->view->addJs('/js/themes/common/multi.min.js');
-        //$this->view->addJs('/js/themes/common/multi.min.js');
-
         /*el titulo del modulo*/
         $this->view->title          = $this->title;
         /*la descripcion del modulo*/
@@ -49,26 +45,29 @@ class admin_controller extends controller {
         $page   = $this->view->loadTemplate('page');
         /*Cargo las plantillas en la vista*/
         $this->view->load($page->render([
-                /*esto carga los metadata*/
-                'metatags'  => $this->view->meta,
-                /*esto es el cuerpo html*/
-                'main'      => $this->main_tpl->render( $this->view->getContent() ),
-                /*en este caso js no se usa pero lo dejo aqui*/
-                'js'        => $this->view->js
-            ]
-        ));
+            /*esto carga los metadata*/
+            'metatags'  => $this->view->meta,
+            /*el menu header*/
+            'menu'      => $this->view->loadTemplate('menu'),
+            /*este es el menu lateral*/
+            'sidebar'   => $this->view->loadTemplate('sidebar'),
+            /*esto es el cuerpo html*/
+            'main'      => $this->main_tpl->render( $this->view->getContent() ),
+            /*este es el footer*/
+            'footer'      => $this->view->loadTemplate('footer'),
+            /*El/los js*/
+            'js'        => $this->view->js
+        ]));
         $this->view->generate();
     }
 
     /*mostramos la vista general*/
     private function show_overview() {
-        /**/
+        /*la lista de usuarios*/
         $users = $this->model->get_users();
         if (($users === false)) {
             $this->view->add_message("Error la consultar la base de datos.");
         }
-        /*edito el titulo*/
-        $this->title = 'Mostrando la lista de usuarios disponibles';
         /*inicializo las variables sde la vista*/
         $this->set();
         /*seteo la cache en off*/
@@ -84,7 +83,7 @@ class admin_controller extends controller {
     /*mostramos el formulario*/
     private function show_form($user = []) {
         /*edito el titulo*/
-        $this->title = 'El titulo del formulario';
+        $this->title = 'Formulario de Usuarios';
         /*seteo la cache en off*/
         $this->view->cache->cache_on = false;
         /*inicializo las variables sde la vista*/

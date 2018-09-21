@@ -1,40 +1,27 @@
-<main data-module="admin">
-            <div style="text-align:center;margin-top:20px;">
-                <table align=center border=1 >
-                    <thead>
-                        <tr>
-                            <th><a href="/admin/new">Registrar</a>  </th>
-                            <th><a href="/logout">Salir</a>  </th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-            <div style="text-align:center;margin-top:20px;">
-            {{#messages}}
-                <h2>{{message}}</h2>
-            {{/messages}}
-            </div>
-
-            <div style="text-align:center;margin-top:80px;">
-                <table align=center border=1 >
-                    <thead>
-                        <tr>
-                            <th>Usuario</th>
-                            <th>Nombre</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            {{#users}}
-                        <tr>
-                            <td>{{{username}}}</td>
-                            <td>{{{fullname}}}</td>
-                            <td>
-                                <a href="/admin/{{{id_user}}}" title="Editar">Editar</a>
-                            </td>
-                        </tr>
-            {{/users}}
-                    </tbody>
-                </table>
-            </div>
-        </main>
+<div class="col col-lg-9">
+                        <h4>Lista de Usuarios</h4>
+                        <hr>
+                        {{#messages}}
+                            <p class="alert alert-danger">{{message}}</p>
+                        {{/messages}}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Nombre</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {{#users}}
+                                <tr>
+                                    <td>{{{username}}}</td>
+                                    <td>{{{fullname}}}</td>
+                                    <td>
+                                        <a class="button-primary button-small button-round" href="/admin/{{{id_user}}}" title="Editar">Editar</a>
+                                    </td>
+                                </tr>
+                            {{/users}}
+                            </tbody>
+                        </table>
+                    </div>

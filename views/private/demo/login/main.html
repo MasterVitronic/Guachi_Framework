@@ -1,12 +1,17 @@
-<div style="text-align:center">
-            <h1>LogIn</h1>
-            {{#messages}}
-                <p>{{message}}</p>
-            {{/messages}}    
-            <br/>
-            <form action="" method="post">
-                <input type="text" name="username" value="{{{username}}}" placeholder="Usuario" /><br>
-                <input type="password" name="password" value="vitronic" placeholder="Contaseña"  /><br>
-                <input type="submit" name="submit_button" value="Entrar"/>
-            </form>
-        </div>
+<section class="center-box">
+                        <div class="container container-small" >
+                            <div class="card">
+                                <h2 class="card-title">Guachi LogIn</h2>
+                                {{#messages}}
+                                    <p class="alert alert-danger">{{message}}</p>
+                                {{/messages}}
+                                <form action="" method="post">
+                                    <input type="text" name="username" value="{{{username}}}" placeholder="Usuario" /><br>
+                                    <input type="password" name="password" placeholder="Contaseña"  /><br>
+                                    <div class="card-actions">
+                                        <button class="button-primary button-purple" type="submit" name="submit_button" value="Entrar">Entrar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
