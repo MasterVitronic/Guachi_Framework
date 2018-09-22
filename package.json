@@ -35,6 +35,8 @@
     "README.md"
   ],
   "dependencies": {
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "mustard-ui": "0.0.8",
+    "spectre.css": "^0.5.3"
   }
 }
