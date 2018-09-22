@@ -26,7 +26,7 @@ class admin_controller extends controller {
 
     private function set(){       
         /*El css principal*/
-        $this->view->addCss('/css/themes/private/demo/mustard-ui.css');
+        $this->view->addCss('/css/themes/private/'.private_theme.'/style.css');
         /*En el caso de añadir algun js*/
         //$this->view->addJs('/js/themes/common/multi.min.js');
         /*el titulo del modulo*/

@@ -22,9 +22,9 @@ class login_controller extends controller {
         /*el autor del modulo*/
         $this->view->author         = 'Máster Vitronic';
         /*El css principal*/
-        $this->view->addCss('/css/themes/private/demo/mustard-ui.css');
+        $this->view->addCss('/css/themes/private/'.private_theme.'/style.css');
         /*el css del modulo*/
-        $this->view->addCss('/css/themes/private/demo/login/login.css');
+        $this->view->addCss('/css/themes/private/'.private_theme.'/login/login.css');
         /*seteo todos los parametros de la vista*/
         $this->view->set();
         /*La plantilla de la pagina*/

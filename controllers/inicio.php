@@ -20,7 +20,7 @@ class inicio_controller extends controller {
         /*el autor del modulo*/
         $this->view->author         = 'Máster Vitronic';
         /*El css principal*/
-        $this->view->addCss('/css/themes/private/demo/mustard-ui.css');        
+        $this->view->addCss('/css/themes/private/'.private_theme.'/style.css');
         /*seteo todos los parametros de la vista*/
         $this->view->set();
         /*La plantilla de la pagina*/
