@@ -30,10 +30,6 @@
     "build": "grunt build",
     "start": "grunt monitor"
   },
-  "files": [
-    "LICENSE",
-    "README.md"
-  ],
   "dependencies": {
     "jquery": "^3.3.1",
     "mustard-ui": "0.0.8",
