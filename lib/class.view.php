@@ -239,8 +239,10 @@ class view {
         if ((headers_sent() == false) && ($this->http_status != 200)) {
             header(sprintf("Status: %d", $this->http_status));
         }
-        header("X-Frame-Options: sameorigin");
-        header("X-Content-Type-Options: nosniff");        
+        if( is_true(production) ){
+            header("X-Frame-Options: sameorigin");
+            header("X-Content-Type-Options: nosniff");
+        }
         $header="X-Powered-By: Guachi (Lightweight and very simple web "
         ."development framework of Vitronic) v".GUACHI_VERSION;
         header($header);
