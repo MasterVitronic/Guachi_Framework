@@ -21,18 +21,18 @@ module.exports = function(grunt) {
     'use strict';
     /* Configuracion general de las tareas*/
     grunt.initConfig({
-        views   : 'views/',     /*views directory*/
-        src_sass: 'public/css/themes/',/*sources sass*/
-        src_less: 'public/css/themes/',/*sources less*/
-        src_js  : 'public/js/', /*sources javascript*/
+        views   : 'views',     /*views directory*/
+        src_sass: 'public/css/themes',/*sources sass*/
+        src_less: 'public/css/themes',/*sources less*/
+        src_js  : 'public/js', /*sources javascript*/
         /*
          * directorios a limpiar
          *
          * @see https://github.com/gruntjs/grunt-contrib-clean
          * */
         clean: [
-            'public/css/dist/',
-            'public/js/dist/'
+            'public/css/dist',
+            'public/js/dist'
         ],
         /*
          * Compilar sass
@@ -50,7 +50,7 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: '<%= src_sass %>',
                     src: ['**/**/**/**/*.scss'],
-                    dest: 'public/css/themes',
+                    dest: '<%= src_sass %>',
                     ext: '.css'
                 }]
             }
@@ -72,7 +72,7 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: '<%= src_less %>',
                 src: ['**/**/**/**/*.less'],
-                dest: 'public/css/themes',
+                dest: '<%= src_less %>',
                 ext: ".css"
             }
         },
@@ -105,7 +105,7 @@ module.exports = function(grunt) {
         browserify: {
           dist: {
             files: {
-              'public/js/guachi.js': ['<%= src_js %>/**/**/*.src.js']
+              '<%= src_js %>/guachi.js': ['<%= src_js %>/**/**/*.src.js']
             },
             options: {
             }
@@ -164,6 +164,22 @@ module.exports = function(grunt) {
                 }
               }
             }
+        },
+        /*
+         * purifycss , optimiza los css
+         *
+         * @see https://github.com/purifycss/grunt-purifycss
+         * @TODO , esto no esta listo
+         * */        
+        purifycss: {
+            options: {},
+            target: {
+              //src: ['<%= views %>/**/**/**/*.html', '<%= src_js %>/guachi.js'],
+              src: ['<%= views %>/private/mustard/**/*.html', '<%= src_js %>/guachi.js'],
+              //css: ['<%= src_sass %>/**/**/**/**/*.css'],
+              css: ['<%= src_sass %>/private/mustard/**/**/*.css'],
+              dest: '<%= src_sass %>/guachi.css'
+            }
         }
     });
     /* loadNpmTasks carga todas las tareas */
@@ -179,9 +195,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-browserify');
     /*cargo clean*/
     grunt.loadNpmTasks('grunt-contrib-clean');
-
+    /*cargo purifycss*/
+    grunt.loadNpmTasks('grunt-purifycss');
+    
     /*el builder  <grunt build> */
-    grunt.registerTask('build', ['browserify','uglify','sass','less']);
+    grunt.registerTask('build', ['browserify','sass','less','uglify']);
     /*el watcher  <grunt monitor>*/
-    grunt.registerTask('monitor', ['browserify','uglify','sass','less','watch']);
+    grunt.registerTask('monitor', ['browserify','sass','less','uglify','watch']);
 };
